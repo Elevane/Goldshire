@@ -9,8 +9,14 @@ import {
 
 import type { Route } from "./+types/root"
 import "./app.css"
-
+import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar"
+import { RecoilRoot } from "recoil"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { useState } from "react"
+import { Toaster } from "sonner"
+import { AppSidebar } from "./features/SideBar/app-sidebar"
 export function Layout({ children }: { children: React.ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient())
   return (
     <html lang="en">
       <head>
@@ -20,9 +26,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
+        <RecoilRoot>
+          <QueryClientProvider client={queryClient}>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarTrigger />
+              {children}
+            </SidebarProvider>
+            <ScrollRestoration />
+            <Scripts />
+            <Toaster />
+          </QueryClientProvider>
+        </RecoilRoot>
       </body>
     </html>
   )
