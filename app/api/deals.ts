@@ -1,7 +1,11 @@
+import axios from "axios"
+
 export const getDeals = () => {
   var deals
   try {
-    var result = fetch("https://localhost:7206/deals").then((x) => x.json())
+    var result = axios
+      .get(`${import.meta.env.API_URL}deals`)
+      .then((x) => x.data)
     deals = result
   } catch {
     deals = []

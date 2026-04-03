@@ -1,7 +1,11 @@
+import axios from "axios"
+
 export const getRealms = () => {
   var realms
   try {
-    var result = fetch("https://localhost:7206/realms").then((x) => x.json())
+    var result = axios
+      .get(`${import.meta.env.API_URL}realms`)
+      .then((x) => x.data)
     realms = result
   } catch {
     realms = []
