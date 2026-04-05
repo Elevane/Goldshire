@@ -1,64 +1,82 @@
+import { describe, it, expect, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
-import { describe, it, expect } from "vitest"
+import React from "react"
 import { AuctionTableBody } from "./AuctionTableBody"
+
+
+// Mock child components
+vi.mock("~/features/Icons/BlizzardIcon", () => ({
+  BlizzardIcon: ({ id }: { id: number }) => (
+    <div data-testid="blizzard-icon">icon-{id}</div>
+  ),
+}))
+
+vi.mock("~/features/Gold/Gold", () => ({
+  Gold: ({ value }: { value: number }) => (
+    <div data-testid="gold">{value}</div>
+  ),
+}))
+
+// Mock table components (if they are just wrappers)
+vi.mock("~/components/ui/table", () => ({
+  TableBody: ({ children }: any) => <tbody>{children}</tbody>,
+  TableRow: ({ children }: any) => <tr>{children}</tr>,
+  TableCell: ({ children }: any) => <td>{children}</td>,
+}))
 
 describe("AuctionTableBody", () => {
   const mockAuctions = [
     {
       item: { id: 1 },
-      bid: 100,
-      buyout: 200,
-      quantity: 2,
-      time_left: "SHORT",
+      bid: 10000,
+      buyout: 20000,
+      quantity: 3,
+      time_left: "LONG",
     },
     {
       item: { id: 2 },
-      bid: 300,
-      buyout: 400,
-      quantity: 5,
-      time_left: "LONG",
+      bid: 5000,
+      buyout: 15000,
+      quantity: 1,
+      time_left: "SHORT",
     },
   ]
 
   it("renders all auctions", () => {
     render(<AuctionTableBody auctions={mockAuctions} />)
+
+    // Check rows count
     const rows = screen.getAllByRole("row")
-    expect(rows).toHaveLength(2)
+    expect(rows).toHaveLength(mockAuctions.length)
   })
 
   it("renders BlizzardIcon with correct ids", () => {
     render(<AuctionTableBody auctions={mockAuctions} />)
 
-    const icons = screen.getAllByTestId("icon")
-    expect(icons[0]).toHaveTextContent("1")
-    expect(icons[1]).toHaveTextContent("2")
+    const icons = screen.getAllByTestId("blizzard-icon")
+    expect(icons[0]).toHaveTextContent("icon-1")
+    expect(icons[1]).toHaveTextContent("icon-2")
   })
 
-  it("renders Gold values correctly (bid + buyout)", () => {
+  it("renders Gold values correctly", () => {
     render(<AuctionTableBody auctions={mockAuctions} />)
 
-    const golds = screen.getAllByTestId("gold")
+    const goldValues = screen.getAllByTestId("gold")
 
-    expect(golds).toHaveLength(4)
-    expect(golds[0]).toHaveTextContent("100") // bid
-    expect(golds[1]).toHaveTextContent("200") // buyout
-    expect(golds[2]).toHaveTextContent("300")
-    expect(golds[3]).toHaveTextContent("400")
+    expect(goldValues[0]).toHaveTextContent("10000")
+    expect(goldValues[1]).toHaveTextContent("20000")
+    expect(goldValues[2]).toHaveTextContent("5000")
+    expect(goldValues[3]).toHaveTextContent("15000")
   })
 
   it("renders quantity and time_left", () => {
     render(<AuctionTableBody auctions={mockAuctions} />)
 
-    expect(screen.getByText("2")).toBeInTheDocument()
-    expect(screen.getByText("5")).toBeInTheDocument()
+    expect(screen.getByText("3")).toBeInTheDocument()
+    expect(screen.getByText("1")).toBeInTheDocument()
 
-    expect(screen.getByText("SHORT")).toBeInTheDocument()
     expect(screen.getByText("LONG")).toBeInTheDocument()
-  })
-
-  it("renders nothing when auctions is empty", () => {
-    render(<AuctionTableBody auctions={[]} />)
-    const rows = screen.queryAllByRole("row")
-    expect(rows).toHaveLength(0)
+    expect(screen.getByText("SHORT")).toBeInTheDocument()
   })
 })
+

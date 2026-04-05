@@ -42,11 +42,12 @@ const DealCardHeader: React.FC<DealCardHeaderProps> = ({
         <p>
           {" "}
           Profit:{" "}
-          <span
-            className={`text-sm font-medium ${
-              isGoodDeal ? "text-green-300" : "text-red-300"
-            }`}
-          >
+              <span
+        data-testid="profit-value"
+        className={`text-sm font-medium ${
+          isGoodDeal ? "text-green-300" : "text-red-300"
+        }`}
+      >
             <Gold value={number} />{" "}
           </span>
         </p>

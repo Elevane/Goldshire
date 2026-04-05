@@ -7,7 +7,7 @@ import {
   isRouteErrorResponse,
 } from "react-router"
 
-import type { Route } from "./+types/root"
+ 
 import "./app.css"
 import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar"
 import { RecoilRoot } from "recoil"

@@ -21,7 +21,7 @@ export const BlizzardIcon: React.FC<BlizzardIconProps> = ({ name, id }) => {
         width={32}
         height={32}
         className="mt-2 flex-shrink-0 rounded-sm border border-solid border-gray-300"
-        src={data}
+        src={data ?? ""}
         alt={`icon_auction_number_${id}`}
       />
       <h2 className="m0 max-w-xs text-lg">{name}</h2>
