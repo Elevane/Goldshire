@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query"
 
 describe("BlizzardIcon", () => {
   it("affiche l'image avec la bonne src et alt", () => {
-    ;(useQuery as any).mockReturnValue({
+    ; (useQuery as any).mockReturnValue({
       data: "image-url",
       isLoading: false,
     })
@@ -25,7 +25,7 @@ describe("BlizzardIcon", () => {
   })
 
   it("affiche le nom", () => {
-    ;(useQuery as any).mockReturnValue({
+    ; (useQuery as any).mockReturnValue({
       data: "image-url",
       isLoading: false,
     })
@@ -36,7 +36,7 @@ describe("BlizzardIcon", () => {
   })
 
   it("appelle useQuery avec la bonne clé", () => {
-    ;(useQuery as any).mockReturnValue({
+    ; (useQuery as any).mockReturnValue({
       data: "image-url",
       isLoading: false,
     })
@@ -51,7 +51,7 @@ describe("BlizzardIcon", () => {
   })
 
   it("gère une data undefined", () => {
-    ;(useQuery as any).mockReturnValue({
+    ; (useQuery as any).mockReturnValue({
       data: undefined,
       isLoading: false,
     })
@@ -63,7 +63,7 @@ describe("BlizzardIcon", () => {
   })
 
   it("affiche quand même l'image même en loading", () => {
-    ;(useQuery as any).mockReturnValue({
+    ; (useQuery as any).mockReturnValue({
       data: undefined,
       isLoading: true,
     })
@@ -72,5 +72,28 @@ describe("BlizzardIcon", () => {
 
     const img = screen.getByRole("img")
     expect(img).toBeInTheDocument()
+  })
+  it("exécute le queryFn", async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      text: () => Promise.resolve("image-url"),
+    })
+
+    global.fetch = mockFetch as any
+
+    let queryFn: any
+
+      ; (useQuery as any).mockImplementation((config: any) => {
+        queryFn = config.queryFn
+        return { data: undefined, isLoading: false }
+      })
+
+    render(<BlizzardIcon id={7} name="Item" />)
+
+    const result = await queryFn()
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://localhost:7206/images/7"
+    )
+    expect(result).toBe("image-url")
   })
 })
