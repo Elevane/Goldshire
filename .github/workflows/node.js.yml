@@ -39,4 +39,5 @@ jobs:
         run: npx playwright test
 
       - name: Playwright report
+        if: always()
         run: npx playwright show-report
