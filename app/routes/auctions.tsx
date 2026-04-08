@@ -28,3 +28,5 @@ export default function Auctions() {
     </Table>
   )
 }
+
+document.title = "Auctions"
