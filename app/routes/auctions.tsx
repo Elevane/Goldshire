@@ -9,7 +9,7 @@ export default function Auctions() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center p-6">
+      <div data-testid="auction-spinner" className="flex justify-center p-6">
         <Loader className="animate-spin" />
       </div>
     )
