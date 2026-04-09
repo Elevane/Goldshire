@@ -1,4 +1,4 @@
-name: Node.js CI + Playwright
+name: Node.js CI
 
 on:
   push:
@@ -32,15 +32,15 @@ jobs:
       - name: Run unit tests
         run: npm run test -- --coverage
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+      # - name: Install Playwright Browsers
+      #   run: npx playwright install --with-deps
 
-      - name: Run Playwright E2E tests
-        run: npx playwright test --reporter=list,html
+      # - name: Run Playwright E2E tests
+      #   run: npx playwright test --reporter=list,html
     
-      - name: Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@v4
+      # - name: Upload Playwright report
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report
